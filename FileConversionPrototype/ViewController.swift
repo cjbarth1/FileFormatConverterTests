@@ -6,14 +6,25 @@
 //
 
 import UIKit
+import Foundation
+import AVKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
+class ViewController: UIViewController, PhotoPickerConversionDelegate {
+    @IBOutlet weak var readoutLabel: UILabel!
+    
+    lazy var photoPicker: PhotoPicker = {
+        return PhotoPicker(presenter: self, delegate: self)
+    }()
+    
+    @IBAction func photosTapped(_ sender: Any) {
+        present(photoPicker.picker, animated: true, completion: nil)
     }
-
-
+    
+    func didCompleteConversion(fileSize: String, conversionTime: TimeInterval) {
+        readoutLabel.text = "File Size Converted: \(fileSize)\nTime To Convert: \(conversionTime)"
+    }
+    
+    func didErrorConversion() {
+        readoutLabel.text = "Error converting file"
+    }
 }
-
